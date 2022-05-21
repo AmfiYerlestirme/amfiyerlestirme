@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Amfi Yerleştirme</title>
+    <style>
+        p,
+        label {
+            font: 1rem 'Fira Sans', sans-serif;
+        }
+
+        input {
+            margin: .4rem;
+        }
+
+        fieldset {
+            width: 125px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script src="../js/script.js"></script>
+</head>
+
+<body>
+    <button id="clear_button">Temizle</button>
+    <button id="download_button">İndir</button>
+    <button id="farma_1_2" onclick="location.href='../index.html'">Farma-1 / Farma-2</button>
+    <button id="farma_3" onclick="location.href='farma_3.html'">Farma-3</button>
+    <button id="konferans" onclick="location.href='konferans.html'">Konferans</button>
+    <button id="s_salonu" onclick="location.href='s_salonu.html'">S Salonu</button>
+    <fieldset>
+        <legend>Kitapçık türü:</legend>
+
+        <div>
+            <input type="radio" id="a" name="group" value="a">
+            <label for="a">A</label>
+        </div>
+
+        <div>
+            <input type="radio" id="no_group" name="group" value="no_group" checked>
+            <label for="no_group">Yok</label>
+        </div>
+
+        <div>
+            <input type="radio" id="b" name="group" value="b">
+            <label for="b">B</label>
+        </div>
+        <div>
+            <input type="radio" id="empty" name="group" value="empty">
+            <label for="empty">Boş koltuk</label>
+        </div>
+    </fieldset>
+    <object data="../graphs/s_salonu.svg" type="image/svg+xml" id="lecture_hall" width="100%" height="100%"></object>
+</body>
+
+</html>
