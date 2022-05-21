@@ -21,6 +21,8 @@ $(window).on("load", function () {
         canvas.style.width = 1920;
         canvas.style.height = 1080;
         const ctx = canvas.getContext("2d");
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         const img = document.createElement("img");
         img.setAttribute("src", "data:image/svg+xml;base64," + btoa(decodeURIComponent(encodeURIComponent(svgData))));
         img.onload = function () {
