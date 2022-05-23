@@ -1,10 +1,14 @@
 let selectedGroup;
+let reds;
+let blues;
+let total;
 let color = "fill:#8fb9aa;stroke-width:4";
 $(window).on("load", function () {
     const svgDoc = document.getElementById("lecture_hall").contentDocument;
     $(svgDoc).click(function (event) {
         if (event.target.tagName == "rect") {
             $(event.target).attr("style", color);
+            countColors();
         };
     });
     $("#clear_button").click(function () {
@@ -12,6 +16,7 @@ $(window).on("load", function () {
         seats.forEach(element => {
             element.setAttribute("style", "fill:#cccccc;stroke-width:4");
         });
+        countColors();
     });
     $("#download_button").click(function () {
         appendLegend(svgDoc);
@@ -55,39 +60,44 @@ $(window).on("load", function () {
     function appendLegend(svgDoc) {
         const gTag = svgDoc.getElementsByTagName("g")[0];
         const legendRectA = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
-        legendRectA.setAttribute("style", "fill:#ff0000;stroke-width:1.72032");
-        legendRectA.setAttribute("id", "legend_rect_a");
-        legendRectA.setAttribute("width", "30");
-        legendRectA.setAttribute("height", "30");
-        legendRectA.setAttribute("x", "1754.4463");
-        legendRectA.setAttribute("y", "961.03424");
+        setAttributes(legendRectA, {
+            "style": "fill:#ff0000;stroke-width:1.72032", "id": "legend_rect_a", "width": "30", "height": "30",
+            "x": "1754.4463",
+            "y": "961.03424"
+        });
 
         const legendRectB = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
-        legendRectB.setAttribute("style", "fill:#0000ff;stroke-width:1.72032");
-        legendRectB.setAttribute("id", "legend_rect_b");
-        legendRectB.setAttribute("width", "30");
-        legendRectB.setAttribute("height", "30");
-        legendRectB.setAttribute("x", "1754.4463");
-        legendRectB.setAttribute("y", "991.03424");
+        setAttributes(legendRectB, {
+            "style": "fill:#0000ff;stroke-width:1.72032",
+            "id": "legend_rect_b",
+            "width": "30",
+            "height": "30",
+            "x": "1754.4463",
+            "y": "991.03424"
+        });
 
         const legendTextA = document.createElementNS("http://www.w3.org/2000/svg", 'text');
-        legendTextA.setAttribute("xml:space", "preserve");
-        legendTextA.setAttribute("style", "font-style:normal;font-weight:normal;font-size:26.6667px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none");
-        legendTextA.setAttribute("id", "legend_text_a");
-        legendTextA.setAttribute("x", "1788.4463");
-        legendTextA.setAttribute("y", "985.03424");
+        setAttributes(legendTextA, {
+            "xml:space": "preserve",
+            "style": "font-style:normal;font-weight:normal;font-size:26.6667px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none",
+            "id": "legend_text_a",
+            "x": "1788.4463",
+            "y": "985.03424"
+        });
 
-        var textNodeA = document.createTextNode("A");
+        const textNodeA = document.createTextNode("A");
         legendTextA.appendChild(textNodeA);
 
         const legendTextB = document.createElementNS("http://www.w3.org/2000/svg", 'text');
-        legendTextB.setAttribute("xml:space", "preserve");
-        legendTextB.setAttribute("style", "font-style:normal;font-weight:normal;font-size:26.6667px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none");
-        legendTextB.setAttribute("id", "legend_text_b");
-        legendTextB.setAttribute("x", "1788.4463");
-        legendTextB.setAttribute("y", "1015.0342");
+        setAttributes(legendTextB, {
+            "xml:space": "preserve",
+            "style": "font-style:normal;font-weight:normal;font-size:26.6667px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none",
+            "id": "legend_text_b",
+            "x": "1788.4463",
+            "y": "1015.0342"
+        });
 
-        var textNodeB = document.createTextNode("B");
+        const textNodeB = document.createTextNode("B");
         legendTextB.appendChild(textNodeB);
 
         gTag.appendChild(legendRectA);
@@ -95,4 +105,72 @@ $(window).on("load", function () {
         gTag.appendChild(legendTextA);
         gTag.appendChild(legendTextB);
     }
+    function setAttributes(el, attrs) {
+        for (var key in attrs) {
+            el.setAttribute(key, attrs[key]);
+        }
+    }
+    function countColors() {
+        let a;
+        let b;
+        let total;
+        reds = $(svgDoc).find("rect[style='fill:#ff0000;stroke-width:4']").length;
+        blues = $(svgDoc).find("rect[style='fill:#0000ff;stroke-width:4']").length;
+        if (reds || blues) {
+            a = reds;
+            b = blues;
+            total = reds + blues;
+        } else {
+            a = "";
+            b = "";
+            total = $(svgDoc).find("rect[style='fill:#8fb9aa;stroke-width:4']").length;
+        }
+        displayCounts(a, b, total);
+    }
+    function displayCounts(a, b, total) {
+        const gTag = svgDoc.getElementsByTagName("g")[0];
+        if ($(gTag).find("#counts_text")) {
+            const childrenToBeRemoved = $(gTag).find("#counts_text");
+            $.each(childrenToBeRemoved, function () {
+                this.remove();
+            })
+        };
+        const countsText = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+        setAttributes(countsText, {
+            "xml:space": "preserve",
+            "style": "font-style:normal;font-weight:normal;font-size:26.6667px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none",
+            "id": "counts_text",
+            "x": "896.48303",
+            "y": "820.10522"
+        });
+
+        const aTspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+        setAttributes(aTspan, {
+            "sodipodi:role": "line",
+            "x": "896.48303",
+            "y": "820.10522"
+        });
+        countsText.appendChild(aTspan);
+        aTspan.innerHTML = "A: " + a;
+
+        const bTspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+        setAttributes(bTspan, {
+            "sodipodi:role": "line",
+            "x": "896.48303",
+            "y": "853.4386"
+        });
+        countsText.appendChild(bTspan);
+        bTspan.innerHTML = "B: " + b;
+
+        const totalTspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+        setAttributes(totalTspan, {
+            "sodipodi:role": "line",
+            "x": "896.48303",
+            "y": "886.77197"
+        });
+        countsText.appendChild(totalTspan);
+        totalTspan.innerHTML = "Toplam: " + total;
+
+        gTag.appendChild(countsText);
+    };
 });
